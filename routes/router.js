@@ -25,20 +25,20 @@ router.post("/register", async (req, res) => {
       res.status(200).json({status:200,storeData})
     }
   } catch (err) {
-    console.log("catch block error");
+    // console.log("catch block error");
     return res.status(400).send({ error:  "An error occurred during registration"});
   }
 });
 //login
 router.post("/login",async(req,res)=>{
-  console.log(req.body);
+  // console.log(req.body);
   const {email,password} = req.body
   if(!email || !password){
   res.status(400).json({error:"Fill all the details"}) 
   }
   try{
     const userValid = await userdb.findOne({email:email});
-    console.log(userValid);
+    // console.log(userValid);
     if(userValid){
       const isMatch = await bcryptjs.compare(password,userValid.password);
       if(!isMatch){
@@ -46,7 +46,7 @@ router.post("/login",async(req,res)=>{
       }else{
         //create tokene
         const token = await userValid.generateAuthtoken();
-        console.log(token);
+        // console.log(token);
         //create cookiesGenrate
         res.cookie("usercookie",token,{
           expires:new Date(Date.now()+9000000),
@@ -85,19 +85,24 @@ router.get("/logout",authenticate,(req,res)=>{
     res.status(400).json({status:400,message:error})
   }
 })
+
+
 router.get("/logout", authenticate, async (req, res) => {
   try {
     // Filter out the token that matches the request token
     req.rootUser.tokens = req.rootUser.tokens.filter((curelem) => {
+      // jo value match nhy hogy wo returb kary ga
       return curelem.token !== req.token;
     });
-    // Save the modified user document
-    await req.rootUser.save();
+  
     // Clear the user cookie and send a success response
     res.clearCookie("usercookie", { path: "/" });
+      // Save the modified user document
+      await req.rootUser.save();
+
     res.status(200).json({ message: "User logged out successfully" });
   } catch (error) {
-    res.status(400).json({ status: 400, message: error.message }); // Sending a more specific error message
+    res.status(400).json({status:200}); 
   }
 });
 export default router;

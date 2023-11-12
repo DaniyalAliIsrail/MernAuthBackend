@@ -6,13 +6,13 @@ const authenticate = async (req, res, next) => {
         try{
                 //jo token login kay time genrate huwa wo lao
                 const token = req.header('Authorization').split(" ")[1];
-                console.log(token);
+                // console.log(token);
                 //jesy token verify huwa wo id degea 
                 const verifyToken = jwt.verify(token,keysecret)
-                console.log(verifyToken);
+                // console.log(verifyToken);
                 //jo id mela us id ko findone query say sara data nekla leya may
                 const rootUser = await userdb.findOne({_id:verifyToken._id})
-                console.log(rootUser);
+                // console.log(rootUser);
                 if(!rootUser){
                         throw new Error("user not found")
                 }

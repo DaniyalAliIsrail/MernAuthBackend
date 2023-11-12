@@ -59,7 +59,7 @@ userSchema.methods.generateAuthtoken = async function () {
     await this.save();
     return tokengenrate;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(400).json(error);
   }
 };
